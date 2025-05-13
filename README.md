@@ -135,7 +135,7 @@ El servidor estará disponible en `http://localhost:4000`
 
 Puedes probar la API utilizando herramientas como Postman o Insomnia.
 
-### Ejemplo de creación de usuario:
+### Ejemplo de endpoints usuarios:
 
 ```http
 POST /api/users/createUser
@@ -163,7 +163,7 @@ Eliminar un usuario
 httpDELETE /api/users/1
 ```
 
-### Ejemplo de creación de trámite:
+### Ejemplo de endpoint trámites:
 
 ```http
 POST /api/tramites/createProcess
