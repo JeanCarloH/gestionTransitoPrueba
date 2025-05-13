@@ -52,40 +52,7 @@ class TramiteController {
   }
 };
 
-  /**
-   * Obtiene un trámite por su ID
-   */
-  getTramiteById = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const tramite = await this.tramiteService.getTramiteById(parseInt(id));
-      
-      // Verificar permisos
-      if (
-        req.user && 
-        req.user.role !== 'admin' && 
-        tramite.userId !== req.user.id
-      ) {
-        return res.status(403).json({
-          success: false,
-          message: 'No tienes permiso para ver este trámite'
-        });
-      }
-      
-      res.status(200).json({
-        success: true,
-        message: 'Trámite obtenido exitosamente',
-        data: tramite
-      });
-    } catch (error) {
-      res.status(404).json({
-        success: false,
-        message: error.message || 'Trámite no encontrado',
-        error: error.toString()
-      });
-    }
-  };
-
+  
   /**
    * Actualiza un trámite
    */
@@ -105,51 +72,6 @@ class TramiteController {
       res.status(400).json({
         success: false,
         message: error.message || 'Error al actualizar el trámite',
-        error: error.toString()
-      });
-    }
-  };
-
-  /**
-   * Actualiza el estado de un trámite
-   */
-  updateTramiteStatus = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const { status } = req.body;
-      
-      if (!status) {
-        return res.status(400).json({
-          success: false,
-          message: 'El estado es requerido'
-        });
-      }
-      
-      // Verificar que el trámite existe y permisos
-      const tramite = await this.tramiteService.getTramiteById(parseInt(id));
-      
-      if (
-        req.user && 
-        req.user.role !== 'admin' && 
-        tramite.userId !== req.user.id
-      ) {
-        return res.status(403).json({
-          success: false,
-          message: 'No tienes permiso para actualizar este trámite'
-        });
-      }
-      
-      const updatedTramite = await this.tramiteService.updateTramiteStatus(parseInt(id), status);
-      
-      res.status(200).json({
-        success: true,
-        message: 'Estado del trámite actualizado exitosamente',
-        data: updatedTramite
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error.message || 'Error al actualizar el estado del trámite',
         error: error.toString()
       });
     }
@@ -191,34 +113,6 @@ class TramiteController {
     }
   };
 
-  /**
-   * Obtiene estadísticas de trámites
-   */
-  getTramiteStats = async (req, res) => {
-    try {
-      // Solo admin puede ver estadísticas generales
-      if (req.user && req.user.role !== 'admin') {
-        return res.status(403).json({
-          success: false,
-          message: 'No tienes permiso para ver estas estadísticas'
-        });
-      }
-      
-      const stats = await this.tramiteService.getTramiteStats();
-      
-      res.status(200).json({
-        success: true,
-        message: 'Estadísticas obtenidas exitosamente',
-        data: stats
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: error.message || 'Error al obtener las estadísticas',
-        error: error.toString()
-      });
-    }
-  };
 }
 
 module.exports = TramiteController;
