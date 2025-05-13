@@ -57,7 +57,6 @@ El proyecto está estructurado siguiendo una **arquitectura en capas** con el pa
 
 ```bash
 git clone https://gestionusuarios-admin@bitbucket.org/gestionusuarios/frontendgestionusuarios.git
-cd backend
 ```
 
 2. Instalar dependencias:
