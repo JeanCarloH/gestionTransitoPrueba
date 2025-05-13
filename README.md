@@ -195,6 +195,7 @@ Content-Type: application/json
 Eliminar un trámite
 httpDELETE /api/tramites/1
 ```
+```
 Ejemplo de respuestas
 Respuesta exitosa de creación
 json{
@@ -220,3 +221,4 @@ json{
   "message": "Error al crear el trámite",
   "error": "El usuario especificado no existe"
 }
+```
