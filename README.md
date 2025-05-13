@@ -1,45 +1,222 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# Sistema de Gestión de Trámites
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+Sistema API REST para la gestión de trámites administrativos con manejo de usuarios y roles.
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+## Descripción
 
----
+Este proyecto implementa una API REST para la gestión de trámites, permitiendo crear, listar, actualizar y eliminar trámites asociados a usuarios. El sistema maneja autenticación de usuarios con roles y permisos diferenciados.
 
-## Edit a file
+## Arquitectura
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+El proyecto está estructurado siguiendo una **arquitectura en capas** con el patrón MVC (Modelo-Vista-Controlador), complementado con el patrón Repository y Service. Esta decisión arquitectónica se tomó por las siguientes razones:
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+### Capas de la aplicación:
 
----
+1. **Controladores**: Manejan las peticiones HTTP, validan los datos de entrada y devuelven respuestas apropiadas.
+2. **Servicios**: Contienen la lógica de negocio, coordinan operaciones entre repositorios.
+3. **Repositorios**: Proporcionan una abstracción para el acceso a datos y operaciones CRUD.
+4. **Modelos**: Definen la estructura de los datos en la base de datos mediante esquemas TypeORM.
+5. **Rutas**: Definen los endpoints de la API y los asocian a los controladores correspondientes.
 
-## Create a file
+### Ventajas de esta arquitectura:
 
-Next, you’ll add a new file to this repository.
+- **Separación de responsabilidades**: Cada capa tiene una responsabilidad clara.
+- **Mantenibilidad**: Facilita la identificación y resolución de problemas.
+- **Testabilidad**: Las capas pueden probarse de forma aislada.
+- **Escalabilidad**: Permite añadir nuevas funcionalidades sin modificar el código existente.
+- **Reutilización**: Los componentes pueden reutilizarse en diferentes partes de la aplicación.
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+### Tecnologías utilizadas:
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+- **Node.js**: Entorno de ejecución para JavaScript del lado del servidor.
+- **Express**: Framework web para la creación de APIs REST.
+- **TypeORM**: ORM (Object-Relational Mapping) para la gestión de la base de datos.
+- **MySQL**: Sistema de gestión de bases de datos relacional.
 
----
+## Estructura del proyecto
 
-## Clone a repository
+```
+├── controllers/         # Controladores de la aplicación
+├── database/           # Configuración de base de datos
+├── models/             # Esquemas/modelos de datos
+├── repositories/       # Repositorios para acceso a datos
+├── routes/             # Definición de rutas
+├── services/           # Servicios con lógica de negocio
+└── index.js            # Punto de entrada de la aplicación
+```
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+## Requisitos previos
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
+- Node.js (v14 o superior)
+- MySQL (v5.7 o superior)
+- npm o yarn
 
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+## Instalación
+
+1. Clonar el repositorio:
+
+```bash
+git clone https://gestionusuarios-admin@bitbucket.org/gestionusuarios/frontendgestionusuarios.git
+cd backend
+```
+
+2. Instalar dependencias:
+
+```bash
+npm install
+# o
+yarn install
+```
+
+3. Configurar variables de entorno:
+
+Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
+
+```env
+# Configuración de la base de datos
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=tu_contraseña
+DB_NAME=tramites_db
+
+# Configuración del servidor
+PORT=3000
+NODE_ENV=development
+
+# Configuración de JWT
+JWT_SECRET=tu_clave_secreta
+JWT_EXPIRATION=24h
+```
+
+4. Crear la base de datos:
+
+```sql
+CREATE DATABASE prueba;
+```
+
+El ORM se encargará de crear las tablas necesarias al iniciar la aplicación gracias a la configuración `synchronize: true` en el entorno de desarrollo.
+
+## Ejecución
+
+```bash
+# Desarrollo
+npm run dev
+# o
+yarn dev
+
+# Producción
+npm start
+# o
+yarn start
+```
+
+El servidor estará disponible en `http://localhost:4000`
+
+## Endpoints de la API
+
+### Usuarios
+
+- `POST /api/users/createUser` - Crear un nuevo usuario
+- `GET /api/users` - Obtener todos los usuarios (Admin)
+- `PUT /api/users/:id` - Actualizar un usuario
+- `DELETE /api/users/:id` - Eliminar un usuario
+
+### Trámites
+
+- `POST /api/tramites/createProcess` - Crear un nuevo trámite
+- `GET /api/tramites` - Obtener todos los trámites
+- `PUT /api/tramites/:id` - Actualizar un trámite
+- `DELETE /api/tramites/:id` - Eliminar un trámite
+
+
+
+## Pruebas de la API
+
+Puedes probar la API utilizando herramientas como Postman o Insomnia.
+
+### Ejemplo de creación de usuario:
+
+```http
+POST /api/users/createUser
+Content-Type: application/json
+
+{
+  "nombre": "Usuario Ejemplo",
+  "correo": "usuario@example.com",
+  "rol": "user"
+}
+```
+```
+Actualizar un usuario
+httpPUT /api/users/1
+Content-Type: application/json
+
+{
+  "nombre": "Nombre Actualizado",
+  "correo": "actualizado@example.com",
+  "rol": "admin"
+}
+```
+```
+Eliminar un usuario
+httpDELETE /api/users/1
+```
+
+### Ejemplo de creación de trámite:
+
+```http
+POST /api/tramites/createProcess
+Content-Type: application/json
+
+{
+  "titulo": "Solicitud de permiso",
+  "descripcion": "Solicitud de permiso para ausencia laboral",
+  "estado": "pendiente",
+  "usuario_id": 1
+}
+```
+```
+Obtener todos los trámites
+httpGET /api/tramites
+```
+```
+Actualizar un trámite
+httpPUT /api/tramites/1
+Content-Type: application/json
+
+{
+  "titulo": "Solicitud de permiso actualizada",
+  "descripcion": "Modificación de solicitud anterior",
+  "estado": "en_proceso"
+}
+```
+```
+Eliminar un trámite
+httpDELETE /api/tramites/1
+```
+Ejemplo de respuestas
+Respuesta exitosa de creación
+json{
+  "success": true,
+  "message": "Trámite creado exitosamente",
+  "data": {
+    "id": 1,
+    "titulo": "Solicitud de permiso",
+    "descripcion": "Solicitud de permiso para ausencia laboral",
+    "estado": "pendiente",
+    "fechaCreacion": "2025-05-13T14:30:00.000Z",
+    "usuario": {
+      "id": 1,
+      "nombre": "Usuario Ejemplo",
+      "correo": "usuario@example.com",
+      "rol": "user"
+    }
+  }
+}
+Respuesta de error
+json{
+  "success": false,
+  "message": "Error al crear el trámite",
+  "error": "El usuario especificado no existe"
+}
