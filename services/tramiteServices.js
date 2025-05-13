@@ -82,8 +82,6 @@ class TramiteService {
   }
 }
 
-
-
   /**
    * Elimina un trámite
    * @param {number} id - ID del trámite
